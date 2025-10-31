@@ -2,7 +2,8 @@ pipeline {
     agent {
         docker {
             image 'node:20'
-            args '-u root:root' // run as root inside the container
+            args '-u root:root -v $WORKSPACE:$WORKSPACE'
+            reuseNode true
         }
     }
 
@@ -21,6 +22,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo "Installing npm dependencies..."
+                sh 'ls -la' // DEBUG: check if package.json exists
                 sh 'npm install'
             }
         }
@@ -42,8 +44,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying application..."
-                // You can add actual deployment commands here
-                // Example: sh 'scp -r dist user@server:/var/www/app'
+                // Add deployment commands here
             }
         }
     }
